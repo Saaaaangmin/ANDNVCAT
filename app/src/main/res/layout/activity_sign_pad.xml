@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/flsignpad">
+
+    <ImageButton
+        android:id="@+id/cancel_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right"
+        android:background="#00ffffff"
+        android:enabled="true"
+        android:padding="5dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_close_popup" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dialog_top"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="카드 서명"
+            android:textColor="#171717"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+            <LinearLayout
+                android:id="@+id/signature_pad_container"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="#959595"
+                android:padding="1dp">
+
+                <com.github.gcacace.signaturepad.views.SignaturePad
+                    android:id="@+id/signature_pad"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#FFFFFF" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="서명해주세요"
+                android:textAlignment="center"
+                android:textColor="#171717"
+                android:textSize="28sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/clear_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_dialog_bottom_left"
+                android:enabled="false"
+                android:fontFamily="sans-serif-medium"
+                android:text="재서명"
+                android:textColor="#180900"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_dialog_bottom_right"
+                android:enabled="false"
+                android:fontFamily="sans-serif-medium"
+                android:text="서명완료"
+                android:textColor="#fff"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
+
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:orientation="vertical">-->
+
+    <!--    <TextView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:gravity="center"-->
+    <!--        android:text="서명해주세요"-->
+    <!--        android:textSize="20dp"-->
+    <!--        android:textStyle="bold" />-->
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/signature_pad_container"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="3"-->
+    <!--        android:padding="2dp"-->
+    <!--        android:background="@drawable/border">-->
+
+    <!--        <com.github.gcacace.signaturepad.views.SignaturePad-->
+    <!--            android:id="@+id/signature_pad"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:background="#FFFFFF"-->
+    <!--            />-->
+    <!--    </LinearLayout>-->
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/buttons_container"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:paddingTop="10dp">-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/cancel_button"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:enabled="true"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginBottom="10dp"-->
+    <!--            android:layout_marginLeft="2dp"-->
+    <!--            android:layout_marginRight="2dp"-->
+    <!--            android:background="@drawable/btn_close"/>-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/clear_button"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:enabled="false"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginBottom="10dp"-->
+    <!--            android:layout_marginLeft="2dp"-->
+    <!--            android:layout_marginRight="2dp"-->
+    <!--            android:background="@drawable/btn_retry"/>-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/save_button"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:enabled="false"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginBottom="10dp"-->
+    <!--            android:layout_marginLeft="2dp"-->
+    <!--            android:layout_marginRight="2dp"-->
+    <!--            android:background="@drawable/btn_ok"/>-->
+    <!--    </LinearLayout>-->
+
+    <!--</LinearLayout>-->

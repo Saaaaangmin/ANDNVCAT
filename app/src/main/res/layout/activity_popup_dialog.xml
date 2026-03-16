@@ -1,0 +1,108 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/overlay_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:id="@+id/popup_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvpopup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minWidth="300dp"
+            android:background="#ebebeb"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/Black"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="10dp">
+
+            <ImageView
+                android:id="@+id/iv_card"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/payment_processing_img_iccard" />
+
+            <TextView
+                android:id="@+id/tv_guide_dock_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:lineSpacingExtra="5dp"
+                android:text="신용카드를 그림과 같이\nIC카드 리더기에 꽂아주세요"
+                android:textColor="@color/Black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_guide_payment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="결제가 완료될 때까지 카드를 빼지 마세요!"
+                android:textColor="@color/Red"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_guide_auto_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif-medium"
+                android:paddingBottom="10dp"
+                android:text="30초이내로 결제하지 않으면 자동 취소됩니다"
+                android:textColor="@color/Red"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="5dp"
+            android:background="#180900"
+            android:text="확인"
+            android:textColor="@color/White"
+            android:textSize="20dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:id="@+id/btrooting"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="5dp"
+            android:background="#180900"
+            android:text="확인"
+            android:textColor="@color/White"
+            android:textSize="20dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:visibility="gone"
+            android:id="@+id/btdcc"/>
+
+    </LinearLayout>
+
+</FrameLayout>

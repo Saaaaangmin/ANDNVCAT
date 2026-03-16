@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_cnl_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="거래상세내역 (운영)"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:textColor="@color/Yellow"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="horizontal">
+
+        <ListView
+            android:id="@+id/listViewdealdetail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnlogcat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="LOGCAT저장"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnsenddb"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="DB보내기"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnback"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="뒤로가기"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btndealcnl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="거래취소 (운영)"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:textColor="@color/Yellow"/>
+
+    </LinearLayout>
+</LinearLayout>

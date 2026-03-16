@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+    <!-- 0x0403 / 0x6001: FTDI FT232R UART -->
+    <!--    <usb-device vendor-id="1027" product-id="24577" />-->
+    <!--    &lt;!&ndash;    <usb-device vendor-id="3468" product-id="20" />&ndash;&gt;-->
+
+    <!--    &lt;!&ndash;    &lt;!&ndash; 0x0403 / 0x6015: FTDI FT231X &ndash;&gt;&ndash;&gt;-->
+    <!--        <usb-device vendor-id="1027" product-id="24597" />-->
+
+    <!--    &lt;!&ndash;    &lt;!&ndash; 0x2341 / Arduino &ndash;&gt;&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <usb-device vendor-id="9025" />&ndash;&gt;-->
+
+    <!--    &lt;!&ndash;    &lt;!&ndash; 0x16C0 / 0x0483: Teensyduino  &ndash;&gt;&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <usb-device vendor-id="5824" product-id="1155" />&ndash;&gt;-->
+
+    <!--    &lt;!&ndash;    &lt;!&ndash; 0x10C4 / 0xEA60: CP210x UART Bridge &ndash;&gt;&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <usb-device vendor-id="4292" product-id="60000" />&ndash;&gt;-->
+
+    <!--    &lt;!&ndash;    &lt;!&ndash; 0x1a86 / 0x7523: Qinheng CH340 &ndash;&gt;&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <usb-device vendor-id="6790" product-id="29987" />&ndash;&gt;-->
+
+    <!--    &lt;!&ndash;    &lt;!&ndash; 0x067B / 0x2303: Prolific PL2303 &ndash;&gt;&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <usb-device vendor-id="1659" product-id="8963" />&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <usb-device vendor-id="1659" product-id="8964" />&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <usb-device vendor-id="1659" product-id="41216" />&ndash;&gt;-->
+
+    <!--OSM20250802 : 각종 시리얼 칩셋 연동 추가-->
+    <!-- FTDI (FT232, FT2232, etc.)-->
+    <usb-device
+        product-id="24577"
+        vendor-id="1027" /> <!-- 0x0403 / 0x6001 -->
+    <usb-device
+        product-id="24592"
+        vendor-id="1027" /> <!-- 0x0403 / 0x6010 -->
+
+    <!-- Silicon Labs CP210x -->
+    <usb-device
+        product-id="60000"
+        vendor-id="4292" /> <!-- 0x10C4 / 0xEA60 -->
+    <usb-device
+        product-id="60001"
+        vendor-id="4292" /> <!-- 0x10C4 / 0xEA61 -->
+
+    <!-- Prolific PL2303 -->
+    <usb-device
+        product-id="8963"
+        vendor-id="1659" /> <!-- 0x067B / 0x2303 -->
+
+    <!-- WCH CH34x -->
+    <usb-device
+        product-id="29987"
+        vendor-id="6790" /> <!-- 0x1A86 / 0x7523 -->
+    <usb-device
+        product-id="21795"
+        vendor-id="6790" /> <!-- 0x1A86 / 0x55D9 -->
+
+    <!-- CDC Generic (표준 USB CDC 장치) -->
+    <usb-device class="2" />
+
+</resources>
+

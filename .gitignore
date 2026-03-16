@@ -1,0 +1,32 @@
+# Gradle
+.gradle/
+**/build/
+build/
+
+# Android Studio
+.idea/
+*.iml
+
+# Local config
+local.properties
+
+# Native build
+.externalNativeBuild/
+.cxx/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# APK
+*.apk
+*.aab
+
+# Generated
+captures/
+
+# zoableservice
+zoableservice-release/build/

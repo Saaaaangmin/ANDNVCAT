@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cbmsgbox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="메시지팝업 사용안함" />
+
+        <CheckBox
+            android:id="@+id/cbretry"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="카드리딩재시도 사용안함" />
+
+        <CheckBox
+            android:id="@+id/cbnosign"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="서명오류시 무서명거래" />
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/textView6"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:gravity="center"-->
+        <!--            android:text="POS 유형" />-->
+
+        <!--        <Spinner-->
+        <!--            android:id="@+id/postype"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_weight="1" />-->
+
+
+        <CheckBox
+            android:id="@+id/cbreqstop"
+            android:layout_width="43dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="취소 키 사용" />
+
+        <EditText
+            android:id="@+id/etstopcode"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="3"
+            android:text="25" />
+
+
+        <CheckBox
+            android:id="@+id/cbsetport"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:text="COM PORT 설정" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cbnocvm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="5만원이하 NOCVM" />
+
+        <CheckBox
+            android:id="@+id/cbsignuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="서명패드 사용 (카드리더유형:멀티패드)" />
+
+        <CheckBox
+            android:id="@+id/cbdualscreenuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="듀얼모니터 사용" />
+
+        <CheckBox
+            android:id="@+id/cbminimalwindow"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="창 최소화" />
+
+        <EditText
+            android:id="@+id/ettimeout2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="2" />
+
+        <EditText
+            android:id="@+id/ettimeout3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="2"
+            android:visibility="invisible"
+            tools:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cbvpnuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="전용회선 사용" />
+
+        <CheckBox
+            android:id="@+id/cbbluetoothuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="블루투스사용" />
+
+        <CheckBox
+            android:id="@+id/cbprinteruse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="프린터사용" />
+
+        <CheckBox
+            android:id="@+id/cbpayprouse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="통합결제사용" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="카드리딩 TIMEOUT시간" />
+
+            <EditText
+                android:id="@+id/ettimeout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:maxLength="2"
+                android:text="30" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!-- 빈 공간을 추가해 '카드리더유형' 가로라인을 오른쪽으로 이동 -->
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="카드리더유형" />
+
+        <Spinner
+            android:id="@+id/readertype"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <CheckBox
+            android:id="@+id/cbtitejectuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="TITENG 카드 수동배출 사용" />
+
+        <CheckBox
+            android:id="@+id/cblockdisuse"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="LOCK비활성화" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="암복호화 방식" />
+
+        <Spinner
+            android:id="@+id/enctype"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="00"
+            android:gravity="center"
+            android:text="DEVICEID"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btrefresh"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="00"
+            android:gravity="center"
+            android:text="새로고침"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="카드리더 Port" />
+
+        <Spinner
+            android:id="@+id/portnum"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="카드리더 Baudrate" />
+
+        <Spinner
+            android:id="@+id/baudrate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="프린터유형" />
+
+        <Spinner
+            android:id="@+id/printertype"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnbluetoothconnect"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="블루투스 연결" />
+
+    </LinearLayout>
+
+    <!--LJY20201217 : 서명패드 Layout 추가-->
+    <LinearLayout
+        android:id="@+id/sllayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="서명패드 Port" />
+
+        <Spinner
+            android:id="@+id/sportnum"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="서명패드 Baudrate" />
+
+        <Spinner
+            android:id="@+id/sbaudrate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="CATID" />
+
+        <EditText
+            android:id="@+id/etcatid"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:inputType="number"
+            android:maxLength="10"
+            android:text="2393300001" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="사업자번호" />
+
+        <EditText
+            android:id="@+id/etbizno"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:inputType="number"
+            android:maxLength="10"
+            android:text="2208115770" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="상호" />
+
+        <EditText
+            android:id="@+id/etbizname"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:enabled="false"
+            android:text="나이스정보통신(주)" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="주소" />
+
+        <EditText
+            android:id="@+id/etbizaddr"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:enabled="false"
+            android:text="서울시 영등포구 은행로 17" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="서버IP" />
+
+        <EditText
+            android:id="@+id/etserverip"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:maxLength="16"
+            android:text="211.33.136.2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="서버PORT" />
+
+        <EditText
+            android:id="@+id/etserverport"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:inputType="number"
+            android:maxLength="6"
+            android:text="9701" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="H/W식별번호" />
+
+        <EditText
+            android:id="@+id/ethwnum"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:enabled="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="S/W식별번호" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:enabled="false"
+            android:text="####ANDNVCAT1005" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnsetenv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="설정 저장" />
+
+        <Button
+            android:id="@+id/btngetenv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="설정 로드" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnbizdown"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="가맹점다운로드" />
+
+        <Button
+            android:id="@+id/btnchkvalid"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="상호인증 및 무결성점검" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btninitkey"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="최초키다운로드" />
+
+        <Button
+            android:id="@+id/btnupdatekey"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="갱신키다운로드" />
+
+    </LinearLayout>
+</LinearLayout>

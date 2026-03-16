@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/llmain">
+
+    <LinearLayout
+        android:id="@+id/layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/one"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="환경설정"
+                android:textSize="9dp" />
+
+            <Button
+                android:id="@+id/two"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="신용결제"
+                android:textSize="9dp" />
+
+            <Button
+                android:id="@+id/three"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="현금영수증결제"
+                android:textSize="9dp" />
+
+            <Button
+                android:id="@+id/four"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="무결성점검내역"
+                android:textSize="9dp" />
+
+            <Button
+                android:id="@+id/five"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="승인내역조회"
+                android:textSize="9dp" />
+        </LinearLayout>
+
+        <!--<android.support.v4.view.ViewPager-->
+        <kr.co.nicevan.androidnvcat.shared.CustomViewPager
+            android:id="@+id/vp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="14"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

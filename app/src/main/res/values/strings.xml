@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">ANDNVCAT</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- 서명패드 요청업무 텍스트 -->
+    <string name="cmd_reset">Reset 요청</string>
+    <string name="cmd_getSystemInfo">Get System Information 요청</string>
+    <string name="cmd_insertKey">DIK Download 요청</string>
+    <string name="cmd_mutual_auth">상호 인증</string>
+    <string name="cmd_integrity">무결성 점검</string>
+    <string name="cmd_exchangeKey">암호화 KEY 정보 동기화</string>
+    <string name="cmd_creditInput">신용 카드읽기</string>
+    <string name="cmd_creditPointInput">신용포인트 카드읽기</string>
+    <string name="cmd_credit_approve">신용 승인거래(VAN)</string>
+    <string name="cmd_user_cancel">거래 중지 요청</string>
+
+    <!-- UI Text -->
+    <string name="result">Result :</string>
+
+    <string name="serial_port">Serial Port :</string>
+    <string name="port">Port :</string>
+    <string name="baudrate">baudrate :</string>
+
+    <string name="key_renewal_mode">키 갱신종료 :</string>
+    <string name="renewal">갱신</string>
+    <string name="first">최초(분배)</string>
+
+    <string name="transaction_mode">거래종류 :</string>
+    <string name="approval">승인</string>
+    <string name="cancel">취소</string>
+</resources>

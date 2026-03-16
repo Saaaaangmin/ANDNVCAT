@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:background="#FFF"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.45"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:background="#EEE"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="커스텀" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:background="#BBB" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.45"
+        android:weightSum="1">
+
+        <TextView
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="다이얼로그"
+            android:id="@+id/textView2"
+            android:background="#CCC"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:background="#AAA" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn"
+        android:text="닫기"
+        android:background="#ABB"
+        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+</LinearLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 사인 그리기 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/signViewGroup"
+    android:layout_width="470dp"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <!-- 서명창 -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="194dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
+        android:layout_marginTop="30dp"
+        android:background="#D3D3D3">
+
+        <com.posbank.device.screader.signView.SignViewImage
+            android:id="@+id/signViewImage"
+            android:layout_width="384dp"
+            android:layout_height="192dp"
+            android:layout_margin="1dp">
+        </com.posbank.device.screader.signView.SignViewImage>
+
+    </LinearLayout>
+
+    <!-- Process Button -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="86dp"
+        android:layout_marginLeft="77dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/signCancel"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_sign_cancel_btn_bg"
+            android:text="취소"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <Space
+            android:id="@+id/space_btn"
+            android:layout_width="22dp"
+            android:layout_height="1dp" />
+
+        <Button
+            android:id="@+id/signOk"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_sign_ok_btn_bg"
+            android:text="확인"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
