@@ -581,8 +581,6 @@ public class OneFragment extends Fragment {
 //                AlarmManager mgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
 //                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, mPendingIntent);
 //                System.exit(0);
-                SharedManager.LogDebug(bLogUse, "debugjy", "[TEST] 설정저장 버튼 클릭되었습니다.");
-
             }
         });
 
@@ -2688,32 +2686,29 @@ public class OneFragment extends Fragment {
                 }
 
 
-                //OSM20260312 : 지원목록 로직 추가
-                SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 파싱 시작");
+                //OSM20260430 : 지원목록 로직 추가
+                if (length_recv >= 60) {
+                    try {
+                        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 파싱 시작");
 
-                try {
-                    if (cSupportedList == null || cSupportedList.length < 10) {
-                        cSupportedList = new char[10];
-                    }
-                    Arrays.fill(cSupportedList, (char)0x00);
+                        if (cSupportedList == null || cSupportedList.length < 10) {
+                            cSupportedList = new char[10];
+                        }
+                        Arrays.fill(cSupportedList, (char) 0x00);
 
-                    int offset = 30 + 16 + 6 + 2;
-                    int need = offset + 10;
+                        int offset = 30 + 16 + 6 + 2;
+                        int need = offset + 10;
 
-                    SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] length_recv=" + length_recv);
-
-                    if (length_recv >= 60) {
                         for (k = 0; k < 10; k++) cSupportedList[k] = RECVBuf[offset + k];
-                        SharedManager.LogDebug(bLogUse, "debugjy",
-                                "[NVCAT] 지원가능목록='" + new String(cSupportedList).replace("\u0000","_") + "'");
+                        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원가능목록 : '" + new String(cSupportedList).replace("\u0000", "_") + "'");
+
+                        String supportedStr = new String(cSupportedList).replace("\u0000", "").trim();
+                        mSharedManager.getPreferences().edit().putString("SUPPORTEDLIST", supportedStr).commit();
+
+                        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 저장 완료");
+                    } catch (Throwable t) {
+                        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 파싱 예외: " + Log.getStackTraceString(t));
                     }
-
-                    String supportedStr = new String(cSupportedList).replace("\u0000","").trim();
-                    mSharedManager.getPreferences().edit().putString("SUPPORTEDLIST", supportedStr).commit();
-
-                    SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 저장 완료");
-                } catch (Throwable t) {
-                    SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 파싱 예외: " + Log.getStackTraceString(t));
                 }
 
 

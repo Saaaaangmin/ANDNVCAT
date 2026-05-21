@@ -357,7 +357,6 @@ public class MainActivity extends AppCompatActivity
 //                        PopupOpenWithClose(MainActivity.this, "디바이스 연결상태를 확인해주시길 바랍니다.");
 
                     break;
-
                 case UsbService.ACTION_USB_DISCONNECTED: // USB DISCONNECTED
                     SetFinish(context, 1, "시리얼 연결이 해제되었습니다.", true, false);
                     mSharedManager.getPreferences().edit().putInt("MainVisibleInt", 1).commit(); //LJY20230731 : 1이면 visible
@@ -696,7 +695,7 @@ public class MainActivity extends AppCompatActivity
 
         deleteStatusBar(getWindow()); //OSM20230911 : 결제 팝업 시 하단 네비게이션 바 제거
 
-        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] DATE    : 26.3.12.1");  //OSM20260312 : 날짜변경
+        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] DATE    : 26.4.30.1");  //OSM20260430 : 날짜변경
         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] VERSION : " + SWNUM);
 
         LogSaver.saveLogAsync(getApplicationContext());   //OSM20250929 : 로그 저장 (OSM20251121 : MERGE 완료)
@@ -2005,7 +2004,7 @@ public class MainActivity extends AppCompatActivity
 //                        handlerThread.start();
 
 
-                        //OSM20260312 : 최초키 다운로드 로직 원복
+                        //OSM20260430 : 최초키 다운로드 로직 원복
                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] ENCKEYDOWN API 실행되었습니다.");
                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 최초키 1단계 다운로드 중입니다."); //20200108LJY
 
@@ -4153,20 +4152,14 @@ public class MainActivity extends AppCompatActivity
                                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 카드리딩 요청입니다. (5)");
 //                                                                func_code = 0x6C;     //LJY20250904 : 8BIN/통합결제 적용
 
-                                                                //OSM20260312 : 지원가능목록 불러오기
-                                                                // 지원가능목록 불러오기
+                                                                //OSM20260430 : 지원가능목록 불러오기
                                                                 String sSupportedList = "";
                                                                 sSupportedList = mSharedManager.getPreferences().getString("SUPPORTEDLIST", "");
 
-                                                                SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] SUPPORTEDLIST(raw)='" + sSupportedList + "' len=" + sSupportedList.length());
+                                                                SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] SUPPORTEDLIST : '" + sSupportedList + "' (len : " + sSupportedList.length() + ")");
 
                                                                 // strtol 호환 파싱 (String으로)
                                                                 long supported = strtolHexCompat(sSupportedList.toCharArray());
-
-                                                                // hex로 로그 찍기 (중요)
-                                                                SharedManager.LogDebug(bLogUse, "debugjy",
-                                                                        "[NVCAT] EMV Contactless 지원가능목록(hex)=" + Long.toHexString(supported).toUpperCase()
-                                                                                + ", dec=" + supported);
 
                                                                 scr = new ScrProtocolCom(MainActivity.this, "COM" + (mSharedManager.getPreferences().getInt("Portnum", 0) + 1), mSharedManager.getPreferences().getString("BaudrateStr", "115200"));
 
@@ -4182,17 +4175,17 @@ public class MainActivity extends AppCompatActivity
                                                                 scr.clearTxBuffer();
 
                                                                 if(supported >= 0x80)
-                                                                    writeBuffer = new char[45];  //Length(2)     //OSM20260312 : 길이 수정 (39 -> 40)
+                                                                    writeBuffer = new char[45];  //Length(2)     //OSM20260430 : 길이 수정 (39 -> 40)
                                                                 else
                                                                     writeBuffer = new char[44];  //Length(2)
-                                                                writeBuffer[0] = 0x02;       //Header ID
-                                                                writeBuffer[1] = func_code;  //Command ID
+                                                                writeBuffer[0] = 0x02;           //Header ID
+                                                                writeBuffer[1] = func_code;      //Command ID
                                                                 writeBuffer[2] = 0x00;
                                                                 if(supported >= 0x80)
-                                                                    writeBuffer[3] = 0x40;       //Length(2)     //OSM20260312 : 길이 수정 (39 -> 40)
+                                                                    writeBuffer[3] = 0x40;       //Length(2)     //OSM20260430 : 길이 수정 (39 -> 40)
                                                                 else
                                                                     writeBuffer[3] = 0x39;       //Length(2)
-                                                                String sendstr = mTimeout;   //Card 대기시간(2)
+                                                                String sendstr = mTimeout;       //Card 대기시간(2)
                                                                 Date now = new Date();
                                                                 String strDate = (new SimpleDateFormat("yyyyMMddHHmmss")).format(now);
                                                                 sendstr = sendstr + strDate; //거래일시(14)
@@ -4200,11 +4193,11 @@ public class MainActivity extends AppCompatActivity
                                                                 sendstr = sendstr + mCatid;  //TID(10)
                                                                 sendstr = sendstr + sReaderApprtp;      //LJY20250904 : 8BIN/통합결제 적용
 
-                                                                //OSM20260312 : 0x9C 요청 데이터 추가 (EMV Chip Data 추가 시)
+                                                                //OSM20260430 : 0x9C 요청 데이터 추가 (EMV Chip Data 추가 시)
                                                                 if(supported >= 0x80)
                                                                 {
                                                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] EMV CHIP 데이터 추가 요청");
-                                                                    sendstr = sendstr + "1";      //OSM20260312 : EMV Chip Data 값 추가
+                                                                    sendstr = sendstr + "1";      //OSM20260430 : EMV Chip Data 값 추가
                                                                     System.arraycopy(sendstr.toCharArray(), 0, writeBuffer, 4, 40);
                                                                     writeBuffer[44] = xor_sum(writeBuffer, 44);
 
@@ -4287,34 +4280,27 @@ public class MainActivity extends AppCompatActivity
                                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 카드리딩 요청입니다. (6)");
 //                                                                func_code = 0x6C;         //LJY20250904 : 8BIN/통합결제 적용
 
-                                                                //OSM20260312 : 지원가능목록 불러오기
-                                                                // 지원가능목록 불러오기
+                                                                //OSM20260430 : 지원가능목록 불러오기
                                                                 String sSupportedList = "";
                                                                 sSupportedList = mSharedManager.getPreferences().getString("SUPPORTEDLIST", "");
 
-                                                                SharedManager.LogDebug(bLogUse, "debugjy",
-                                                                        "[NVCAT] SUPPORTEDLIST(raw)='" + sSupportedList + "' len=" + sSupportedList.length());
+                                                                SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] SUPPORTEDLIST : '" + sSupportedList + "' (len : " + sSupportedList.length() + ")");
 
                                                                 // strtol 호환 파싱 (String으로)
                                                                 long supported = strtolHexCompat(sSupportedList.toCharArray());
 
-                                                                // hex로 로그 찍기 (중요)
-                                                                SharedManager.LogDebug(bLogUse, "debugjy",
-                                                                        "[NVCAT] EMV Contactless 지원가능목록(hex)=" + Long.toHexString(supported).toUpperCase()
-                                                                                + ", dec=" + supported);
-
                                                                 if(supported >= 0x80)
-                                                                    writeBuffer = new char[45];  //Length(2)     //OSM20260312 : 길이 수정 (39 -> 40)
+                                                                    writeBuffer = new char[45];  //Length(2)     //OSM20260430 : 길이 수정 (39 -> 40)
                                                                 else
                                                                     writeBuffer = new char[44];  //Length(2)
-                                                                writeBuffer[0] = 0x02;      //Header ID
-                                                                writeBuffer[1] = func_code; //Command ID
+                                                                writeBuffer[0] = 0x02;           //Header ID
+                                                                writeBuffer[1] = func_code;      //Command ID
                                                                 writeBuffer[2] = 0x00;
                                                                 if(supported >= 0x80)
-                                                                    writeBuffer[3] = 0x40;       //Length(2)     //OSM20260312 : 길이 수정 (39 -> 40)
+                                                                    writeBuffer[3] = 0x40;       //Length(2)     //OSM20260430 : 길이 수정 (39 -> 40)
                                                                 else
                                                                     writeBuffer[3] = 0x39;       //Length(2)
-                                                                String sendstr = mTimeout;  //Card 대기시간(2)
+                                                                String sendstr = mTimeout;       //Card 대기시간(2)
                                                                 Date now = new Date();
                                                                 String strDate = (new SimpleDateFormat("yyyyMMddHHmmss")).format(now);
                                                                 sendstr = sendstr + strDate;//거래일시(14)
@@ -4322,11 +4308,11 @@ public class MainActivity extends AppCompatActivity
                                                                 sendstr = sendstr + mCatid; //TID(10)
                                                                 sendstr = sendstr + sReaderApprtp;      //LJY20250904 : 8BIN/통합결제 적용
 
-                                                                //OSM20260312 : 0x9C 요청 데이터 추가 (EMV Chip Data 추가 시)
+                                                                //OSM20260430 : 0x9C 요청 데이터 추가 (EMV Chip Data 추가 시)
                                                                 if(supported >= 0x80)
                                                                 {
                                                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] EMV CHIP 데이터 추가 요청");
-                                                                    sendstr = sendstr + "1";      //OSM20260312 : EMV Chip Data 값 추가
+                                                                    sendstr = sendstr + "1";      //OSM20260430 : EMV Chip Data 값 추가
                                                                     System.arraycopy(sendstr.toCharArray(), 0, writeBuffer, 4, 40);
                                                                     writeBuffer[44] = xor_sum(writeBuffer, 44);
 
@@ -4614,25 +4600,19 @@ public class MainActivity extends AppCompatActivity
 
                                                                     Sleep(500);
 
-                                                                    //OSM20260312 : 지원가능목록 불러오기
-                                                                    // 지원가능목록 불러오기
+                                                                    //OSM20260430 : 지원가능목록 불러오기
                                                                     String sSupportedList = "";
                                                                     sSupportedList = mSharedManager.getPreferences().getString("SUPPORTEDLIST", "");
 
-                                                                    SharedManager.LogDebug(bLogUse, "debugjy",
-                                                                            "[NVCAT] SUPPORTEDLIST(raw)='" + sSupportedList + "' len=" + sSupportedList.length());
+                                                                    SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] SUPPORTEDLIST : '" + sSupportedList + "' (len : " + sSupportedList.length() + ")");
 
                                                                     // strtol 호환 파싱 (String으로)
                                                                     long supported = strtolHexCompat(sSupportedList.toCharArray());
 
-                                                                    // hex로 로그 찍기 (중요)
-                                                                    SharedManager.LogDebug(bLogUse, "debugjy",
-                                                                            "[NVCAT] EMV Contactless 지원가능목록(hex)=" + Long.toHexString(supported).toUpperCase()
-                                                                                    + ", dec=" + supported);
 //                                                                    func_code = 0x6C;         //LJY20250904 : 8BIN/통합결제 적용
 
                                                                     if(supported >= 0x80)
-                                                                        writeBuffer = new char[45];  //Length(2)     //OSM20260312 : 길이 수정 (39 -> 40)
+                                                                        writeBuffer = new char[45];  //Length(2)     //OSM20260430 : 길이 수정 (39 -> 40)
                                                                     else
                                                                         writeBuffer = new char[44];  //Length(2)
                                                                     writeBuffer[0] = 0x02;       //Header ID
@@ -4640,7 +4620,7 @@ public class MainActivity extends AppCompatActivity
                                                                     writeBuffer[2] = 0x00;
 
                                                                     if(supported >= 0x80)
-                                                                        writeBuffer[3] = 0x40;       //Length(2)     //OSM20260312 : 길이 수정 (39 -> 40)
+                                                                        writeBuffer[3] = 0x40;       //Length(2)     //OSM20260430 : 길이 수정 (39 -> 40)
                                                                     else
                                                                         writeBuffer[3] = 0x39;       //Length(2)
 
@@ -4652,11 +4632,11 @@ public class MainActivity extends AppCompatActivity
                                                                     sendstr = sendstr + mCatid;  //TID(10)
                                                                     sendstr = sendstr + sReaderApprtp;      //LJY20250904 : 8BIN/통합결제 적용
 
-                                                                    //OSM20260312 : 0x9C 요청 데이터 추가 (EMV Chip Data 추가 시)
+                                                                    //OSM20260430 : 0x9C 요청 데이터 추가 (EMV Chip Data 추가 시)
                                                                     if(supported >= 0x80)
                                                                     {
                                                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] EMV CHIP 데이터 추가 요청");
-                                                                        sendstr = sendstr + "1";      //OSM20260312 : EMV Chip Data 값 추가
+                                                                        sendstr = sendstr + "1";      //OSM20260430 : EMV Chip Data 값 추가
                                                                         System.arraycopy(sendstr.toCharArray(), 0, writeBuffer, 4, 40);
                                                                         writeBuffer[44] = xor_sum(writeBuffer, 44);
 
@@ -5734,7 +5714,7 @@ public class MainActivity extends AppCompatActivity
             PopupClose();
 
             if (status == 2) { //타임아웃
-                //OSM20260312 : 시리얼 타임아웃 로직 공동 메서드 변경
+                //OSM20260430 : 시리얼 타임아웃 로직 공동 메서드 변경
                 onSerialTimeout();
                 return;
             }
@@ -5744,7 +5724,7 @@ public class MainActivity extends AppCompatActivity
                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 시리얼데이터 : [" + new String(RECVBuf) + "]");
 
             if (func_code == 0x6B) {
-                handleFunc6B();   //OSM20260312 : 6B 공동 메서드 호
+                handleFunc6B();   //OSM20260430 : 6B 공동 메서드 호출
                 return;
             } else if (func_code == 0x6A) {
                 String errcode = String.format("%02X", RECVBuf[4] & 0xff);
@@ -7483,7 +7463,7 @@ public class MainActivity extends AppCompatActivity
 //                        }
 
 
-                        //OSM20260312 : EMV Chip DATA 가변 처리
+                        //OSM20260430 : EMV Chip DATA 가변 처리
                         int src = (func_code == 0x6C) ? 180 : -1;
 
                         if (func_code != 0x6C) {
@@ -7496,8 +7476,9 @@ public class MainActivity extends AppCompatActivity
                         //실제 복사할 길이 계산
                         int maxCopy = Math.min(icdata.length, Math.max(0, length_recv - src));
 
-                        // 257 초과면 실제 길이 사용, 257 이하이면 257로 고정
-                        int copyLen = (maxCopy > 257) ? maxCopy : 257;
+                        // 253 초과면 실제 길이 사용, 253 이하이면 253으로 고정
+                        int copyLen = (maxCopy > 253) ? maxCopy : 253;
+                        copyLen = copyLen + 4;
 
                         // 배열 크기 초과 방지
                         copyLen = Math.min(copyLen, icdata.length);
@@ -7968,13 +7949,13 @@ public class MainActivity extends AppCompatActivity
                                 } else if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - 포인트승인(동반위)");
                                     //sendBuff = ("0694" + mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                 }
                                 else
                                 if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - 포인트승인");
                                     //sendBuff = ("0694" + mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                 } else {
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS - 포인트승인");
                                     sendBuff = ("0437" + mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "A" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N").getBytes();
@@ -7990,13 +7971,13 @@ public class MainActivity extends AppCompatActivity
                                 } else if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - 포인트취소(동반위)");
                                     //sendBuff = ("0694" + mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                 }
                                 else
                                 if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - 포인트취소");
                                     //sendBuff = ("0694" + mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
 
                                 } else {
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS - 포인트취소");
@@ -8012,13 +7993,13 @@ public class MainActivity extends AppCompatActivity
                                     if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - 현금승인(동반위)");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "020021" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020021" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020021" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                     }
                                     else
                                     if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - 현금승인");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "020021" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020021" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020021" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
 
                                     } else {
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS - 현금승인");
@@ -8097,18 +8078,18 @@ public class MainActivity extends AppCompatActivity
 //                                                System.arraycopy(new String(icdata, 0, 257).getBytes(), 0, sendBuff, 421, 257);
 //
 //
-                                                //OSM20260312 : 이 부분 거래 로직 이상없을지 확인 (확인 필요)
+                                                //OSM20260430 : 이 부분 거래 로직 이상없을지 확인 (확인 필요)
                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - TAX or DCA(동반위)");
-                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260312 : 전문 가변 길이 처리
+                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260430 : 전문 가변 길이 처리
                                             } else {
                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - DCC(동반위)");
                                                 //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260312 : 전문 가변 길이 처리
+                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260430 : 전문 가변 길이 처리
                                             }
                                         } else {
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - 신용승인(동반위)");
                                             //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260312 : 전문 가변 길이 처리
+                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260430 : 전문 가변 길이 처리
                                         }
                                     }
                                     else
@@ -8123,21 +8104,21 @@ public class MainActivity extends AppCompatActivity
 //                                                System.arraycopy(new String(icdata, 0, 257).getBytes(), 0, sendBuff, 421, 257);
 
 
-                                                //OSM20260312 : 이 부분 거래 로직 이상없을지 확인 (확인 필요)
+                                                //OSM20260430 : 이 부분 거래 로직 이상없을지 확인 (확인 필요)
                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - TAX or DCA");
-                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260310 : 전문 가변 길이 처리
+                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260430 : 전문 가변 길이 처리
 
                                             } else {
                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - DCC");
                                                 //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                                //OSM20260312 : icdata 길이에 따른 전문 길이 분기
-                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260310 : 전문 가변 길이 처리
+                                                //OSM20260430 : icdata 길이에 따른 전문 길이 분기
+                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260430 : 전문 가변 길이 처리
                                             }
                                         } else {
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - 신용승인");
 
-                                            //OSM20260312 : icdata 길이에 따른 전문 길이 분기
-                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                            //OSM20260430 : icdata 길이에 따른 전문 길이 분기
+                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                         }
                                     } else {
                                         if (strDealtp.equals("DC")) { //20200312 : DCC개발 (mDcc1 : 통화코드(숫자), mDcc2 : 베이스거래금액, mDcc3 : 베이스거래금액소수점)
@@ -8168,13 +8149,13 @@ public class MainActivity extends AppCompatActivity
                                     if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - 현금취소(동반위)");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "042021" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(1, 9) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042021" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(1, 9) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042021" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(1, 9) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                     }
                                     else
                                     if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - 현금취소");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "042021" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(1, 9) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042021" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(1, 9) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042021" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(1, 9) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                     } else {
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS - 현금취소");
                                         sendBuff = ("0437" + mTxt + mTxtnum + "042021" + mDevicegb + "          " + mCatid + "A" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(1, 9) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N").getBytes();
@@ -8228,13 +8209,13 @@ public class MainActivity extends AppCompatActivity
                                     } else if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - 신용취소(동반위)");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
 
                                     }
                                     else
                                     if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - 신용취소");
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
                                     } else {
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS - 신용취소");
@@ -9114,36 +9095,32 @@ public class MainActivity extends AppCompatActivity
                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 리더기 버전 변경 (통합결제 미사용) : " + "00");
                 }
 
+                SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 0x31_RecvLen :" + length_recv);
 
-                //OSM20260312 : 지원목록 로직 추가
-                SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 파싱 시작");
+                //OSM20260430 : 지원목록 로직 추가
+                if (length_recv >= 60) {
+                    try {
+                        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 파싱 시작");
 
-                try {
-                    if (cSupportedList == null || cSupportedList.length < 10) {
-                        cSupportedList = new char[10];
-                    }
-                    Arrays.fill(cSupportedList, (char)0x00);
+                        if (cSupportedList == null || cSupportedList.length < 10) {
+                            cSupportedList = new char[10];
+                        }
+                        Arrays.fill(cSupportedList, (char) 0x00);
 
-                    int offset = 30 + 16 + 6 + 2;
-                    int need = offset + 10;
+                        int offset = 30 + 16 + 6 + 2;
+                        int need = offset + 10;
 
-                    SharedManager.LogDebug(bLogUse, "debugjy",
-                            "[NVCAT] length_recv=" + length_recv);
-
-                    if (length_recv >= 60) {
                         for (k = 0; k < 10; k++) cSupportedList[k] = RECVBuf[offset + k];
-                        SharedManager.LogDebug(bLogUse, "debugjy",
-                                "[NVCAT] 지원가능목록='" + new String(cSupportedList).replace("\u0000","_") + "'");
+                        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원가능목록 : '" + new String(cSupportedList).replace("\u0000", "_") + "'");
+
+                        String supportedStr = new String(cSupportedList).replace("\u0000", "").trim();
+                        mSharedManager.getPreferences().edit().putString("SUPPORTEDLIST", supportedStr).commit();
+
+                        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 저장 완료");
+                    } catch (Throwable t) {
+                        SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 파싱 예외: " + Log.getStackTraceString(t));
                     }
-
-                    String supportedStr = new String(cSupportedList).replace("\u0000","").trim();
-                    mSharedManager.getPreferences().edit().putString("SUPPORTEDLIST", supportedStr).commit();
-
-                    SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 저장 완료");
-                } catch (Throwable t) {
-                    SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 지원목록 파싱 예외: " + Log.getStackTraceString(t));
                 }
-
                 Sleep(500);
 
                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 상호인증 1단계 진행중입니다.");
@@ -10124,13 +10101,13 @@ public class MainActivity extends AppCompatActivity
                                 } else if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 포인트승인(동반위)");
                                     //sendBuff = ("0694" + mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                 }
                                 else
                                 if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 포인트승인");
                                     //sendBuff = ("0694" + mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0200" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
 
                                 } else {
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 포인트승인");
@@ -10147,13 +10124,13 @@ public class MainActivity extends AppCompatActivity
                                 } else if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 포인트취소(동반위)");
                                     //sendBuff = ("0694" + mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                 }
                                 else
                                 if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 포인트취소");
                                     //sendBuff = ("0694" + mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                    sendBuff = buildLen4Packet(mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                 } else {
                                     SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 포인트취소");
                                     sendBuff = ("0437" + mTxt + mTxtnum + "0420" + strDealtp + mDevicegb + "          " + mCatid + "A" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N").getBytes();
@@ -10169,13 +10146,13 @@ public class MainActivity extends AppCompatActivity
                                     if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 은련승인(동반위)");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                     }
                                     else
                                     if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 은련승인");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                     } else {
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 은련승인");
                                         sendBuff = ("0437" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "A" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N").getBytes();
@@ -10214,20 +10191,20 @@ public class MainActivity extends AppCompatActivity
 //
 //
 
-                                                //OSM20260312 : 이 부분 거래 로직 이상없을지 확인 (확인 필요)
+                                                //OSM20260430 : 이 부분 거래 로직 이상없을지 확인 (확인 필요)
                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - TAX or DCA(동반위)");
                                                 //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
 
                                             } else {
                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF - DCC(동반위)");
                                                 //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));     //OSM20260430 : 전문 가변 길이 처리
                                             }
                                         } else {
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 신용승인(동반위)");
                                             //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                         }
                                     }
                                     else
@@ -10235,32 +10212,32 @@ public class MainActivity extends AppCompatActivity
                                         if (strDealtp.equals("DC")) { //20200312 : DCC개발 (mDcc1 : 통화코드(숫자), mDcc2 : 베이스거래금액, mDcc3 : 베이스거래금액소수점)
                                             if (mTxt.equals("TAX") || mTxt.equals("DCA")) {
 
-     //                                           SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - TAX or DCA");
+                                                //                                           SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - TAX or DCA");
 //                                                System.arraycopy("0694".getBytes(), 0, sendBuff, 0, 4);
 //                                                System.arraycopy("I".getBytes(), 0, sendBuff, 55, 1);
 //                                                System.arraycopy(new String(encdata, 0, 127).getBytes(), 0, sendBuff, 56, 127);
 ////                                            System.arraycopy(new String(icdata, 0, 2).getBytes(), 0, sendBuff, 368, 2);
 //                                                System.arraycopy(new String(icdata, 0, 257).getBytes(), 0, sendBuff, 421, 257);
 ////                                            System.arraycopy(("Y10801" + mCatid + "                       ").getBytes(), 0, sendBuff, 420, 39);
-//                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+//                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
 //
 
 
 
-                                                //OSM20260312 : 이 부분 거래 로직 이상없을지 확인 (확인 필요)
+                                                //OSM20260430 : 이 부분 거래 로직 이상없을지 확인 (확인 필요)
                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - TAX or DCA");
                                                 //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
 
                                             } else {
                                                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC - DCC");
                                                 //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260312 : 전문 가변 길이 처리
+                                                sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                      " + mDcc1 + mDcc2 + mDcc3 + space.substring(0, 61) + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));       //OSM20260430 : 전문 가변 길이 처리
                                             }
                                         } else {
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 신용승인");
                                             //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));         //OSM20260312 : 전문 가변 길이 처리
+                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));         //OSM20260430 : 전문 가변 길이 처리
                                         }
                                     } else {
                                         if (strDealtp.equals("DC")) { //20200312 : DCC개발 (mDcc1 : 통화코드(숫자), mDcc2 : 베이스거래금액, mDcc3 : 베이스거래금액소수점)
@@ -10294,13 +10271,13 @@ public class MainActivity extends AppCompatActivity
                                     if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 은련취소(동반위)");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));         //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));         //OSM20260430 : 전문 가변 길이 처리
                                     }
                                     else
                                     if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 은련취소");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));         //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));         //OSM20260430 : 전문 가변 길이 처리
                                     } else {
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 은련취소");
                                         sendBuff = ("0437" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "A" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N").getBytes();
@@ -10313,13 +10290,13 @@ public class MainActivity extends AppCompatActivity
                                     } else if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 신용취소(동반위)");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260430 : 전문 가변 길이 처리
                                     }
                                     else
                                     if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 신용취소");
                                         //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260312 : 전문 가변 길이 처리
+                                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                                   " + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260430 : 전문 가변 길이 처리
 
                                     } else {
                                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 신용취소");
@@ -10505,13 +10482,13 @@ public class MainActivity extends AppCompatActivity
                                         if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 은련승인(동반위)");
                                             //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260312 : 전문 가변 길이 처리
+                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260430 : 전문 가변 길이 처리
                                         }
                                         else
                                         if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 은련승인");
                                             //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260312 : 전문 가변 길이 처리
+                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260430 : 전문 가변 길이 처리
                                         } else {
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 은련승인");
                                             sendBuff = ("0437" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "A" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N").getBytes();
@@ -10525,13 +10502,13 @@ public class MainActivity extends AppCompatActivity
                                         if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 은련취소(동반위)");
                                             //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260312 : 전문 가변 길이 처리
+                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260430 : 전문 가변 길이 처리
                                         }
                                         else
                                         if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 은련취소");
                                             //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));             //OSM20260312 : 전문 가변 길이 처리
+                                            sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));             //OSM20260430 : 전문 가변 길이 처리
                                         } else {
                                             SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 은련취소");
                                             sendBuff = ("0437" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "A" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N").getBytes();
@@ -12097,13 +12074,13 @@ public class MainActivity extends AppCompatActivity
                     if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 은련승인(동반위)");
                         //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260312 : 전문 가변 길이 처리
+                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));  //OSM20260430 : 전문 가변 길이 처리
                     }
                     else
                     if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 은련승인");
                         //sendBuff = ("0694" + mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));             //OSM20260312 : 전문 가변 길이 처리
+                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "020010" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + "        " + "      " + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));             //OSM20260430 : 전문 가변 길이 처리
 
                     } else {
                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 은련승인");
@@ -12118,13 +12095,13 @@ public class MainActivity extends AppCompatActivity
                     if (Paygb[0] == 'R' && CardBrand[0] == 'K') { //LJY20200713 : 동반위 JUST TOUCH
                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] RF 은련취소(동반위)");
                         //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));             //OSM20260312 : 전문 가변 길이 처리
+                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "K" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));             //OSM20260430 : 전문 가변 길이 처리
                     }
                     else
                     if (Paygb[0] == 'I' || (Paygb[0] == 'R' && Integer.parseInt(new String(icdata, 0, 4)) > 0)) { //LJY20230818
                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] IC 은련취소");
                         //sendBuff = ("0694" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, 257)).getBytes();
-                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));             //OSM20260312 : 전문 가변 길이 처리
+                        sendBuff = buildLen4Packet(mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "I" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N" + new String(icdata, 0, icdataLen));             //OSM20260430 : 전문 가변 길이 처리
                     } else {
                         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] MS 은련취소");
                         sendBuff = ("0437" + mTxt + mTxtnum + "042030" + mDevicegb + "          " + mCatid + "A" + new String(encdata, 0, 127) + mHalbu + mBongsa + mTax + mMoney + mApprno.substring(0, 8) + mApprdate.substring(0, 6) + "                                   " + EncPin + mApprtid + mMyunse + mHwnum + SharedManager.SWNUM + "  " + mFiller + "N").getBytes();
@@ -13078,7 +13055,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //OSM20260312 : 시리얼 타임아웃 로직 공동 메서드 정의
+    //OSM20260430 : 시리얼 타임아웃 로직 공동 메서드 정의
     private void onSerialTimeout() {
         SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 시리얼 통신 타임아웃");
         if (func_code == 0x31 || func_code == 0xA0 || func_code == 0xA1)
@@ -13091,7 +13068,7 @@ public class MainActivity extends AppCompatActivity
         isSign = false;
     }
 
-    //OSM20260312 : 리더기 EOT 전송 로직 공동 메서드 정의
+    //OSM20260430 : 리더기 EOT 전송 로직 공동 메서드 정의
     private void sendEotToReader() {
         byte[] EOT = new byte[]{0x04};
         int readerType = mSharedManager.getPreferences().getInt("Readertype", 0);
@@ -13113,7 +13090,7 @@ public class MainActivity extends AppCompatActivity
         usbService.write(EOT);
     }
 
-    //OSM20260312 : char -> Byte배열 변환 메서드 추가
+    //OSM20260430 : char -> Byte배열 변환 메서드 추가
     private static byte[] charArrayToByteArray(char[] src, int len) {
         byte[] out = new byte[len];
         for (int i = 0; i < len; i++) {
@@ -13123,7 +13100,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //OSM20260312 : 0x6B 로직 공동 메서드 처리 (Code Too Large 이슈)
+    //OSM20260430 : 0x6B 로직 공동 메서드 처리 (Code Too Large 이슈)
     private void handleFunc6B() {
         // func_code == 0x6B 블록 전체를 여기에 옮김
         String errcode = String.format("%02X", RECVBuf[4] & 0xff);
@@ -13141,7 +13118,7 @@ public class MainActivity extends AppCompatActivity
         SetResultFunc(RESULT_OK, 1, "최초키 다운로드 성공");
     }
 
-    //OSM20260312 : VAN 리턴 값 파싱 로직 공동 메서드 처리 (Code Too Large 이슈)
+    //OSM20260430 : VAN 리턴 값 파싱 로직 공동 메서드 처리 (Code Too Large 이슈)
     private boolean extractKeyDownFromVanRecv(byte[] recv, char[] outKeyDown) {
         try {
             String s = new String(recv, "EUC-KR");

@@ -64,7 +64,7 @@ public class SharedManager {
     public static boolean isBizdown = false;
     public static boolean bRooting = false;
     public static boolean bApkchk = false;
-    public static boolean bRelease = true;    //OSM20260312 : 릴리즈용 수정
+    public static boolean bRelease = true;   //OSM20260430 : 릴리즈용 수정
     public static boolean bLogUse = true;
     public static boolean bSetenv = false;    //OSM20240523 : setenv 구분자 값 추가
     public static boolean bCount = false;     //OSM20240617 : 설정 저장 여부 확인을 위한 구분자 값 추가

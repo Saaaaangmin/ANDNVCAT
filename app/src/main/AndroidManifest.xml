@@ -63,6 +63,7 @@
         <activity android:name=".CaptureActivityAnyOrientation" />
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Transparent"
             android:windowSoftInputMode="stateAlwaysHidden"

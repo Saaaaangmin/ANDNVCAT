@@ -48,7 +48,7 @@ public class SharedArray {
     public static char[] key_info = new char[64];
     public static char[] key_down = new char[287];
     public static char[] encdata = new char[127];
-    public static char[] icdata = new char[512];        //OSM20260312 : 사이즈 변경 (257 -> 512)
+    public static char[] icdata = new char[512];        //OSM20260430 : 사이즈 변경 (257 -> 512)
     public static char[] RECVBuf = new char[4096];
     public static char[] CSN = new char[16];
     public static char[] HWNUM = new char[16];
@@ -70,8 +70,8 @@ public class SharedArray {
     public static char[] CardBrand = new char[1]; //LJY20200713 : 동반위 JUST TOUCH
     public static char[] KeyDownCnt = new char[2]; //LJY20200918 : 키다운로드 카운트
     public static char[] CardCvm = new char[1]; //LJY20230713 : 은련PIN 체크
-    public static char[] cReaderBinVer = new char[2]; //LJY20250904 : 8BIN/통합결제 적용
-    public static char[] cSupportedList = new char[11]; //OSM20260312 : EMV Contactless 지원가능목록 변수
+    public static char[] cReaderBinVer = new char[2];   //LJY20250904 : 8BIN/통합결제 적용
+    public static char[] cSupportedList = new char[11]; //OSM20260430 : 9F6E Contactless 지원가능목록 변수
 
     public static char[] cMediagb = new char[1];
 
@@ -79,7 +79,7 @@ public class SharedArray {
     public static int[] ret = new int[1];
     public static byte[] sendBuff = null;
     public static byte[] recvBuff = new byte[3000];
-    public static byte[] sendBuffBody = null;   //OSM20260312 : 전문 바디 부 변수 추가
+    public static byte[] sendBuffBody = null;   //OSM20260430 : 전문 바디 부 변수 추가
 
     public static byte[] temp = null;
     public static byte[] bEncPin = null;
@@ -107,14 +107,14 @@ public class SharedArray {
     public static int slen;
     public static int length_recv;
     public static int status;
-    public static int icdataLen = 0;        //OSM20260312 : EMV 가변 저장 변수
+    public static int icdataLen = 0;  //OSM20260430 : EMV 가변 저장 변수
 
     public static long tstart = 0;
     public static long tend = 0;
     public static long tstarttit = 0; //LJY20230911 : TITENG 리더기 연동 시 타임아웃 체크를 위한 start/end
     public static long tendtit = 0;
-    public static long supported = 0; //OSM20260312 : EMV 지원가능목록 long형 변수
-    public static boolean bTitchk; //LJY20230911 : TITENG 리더기 데이터 처리를 위한 구분 값
+    public static long supported = 0; //OSM20260430 : 9F6E 지원가능목록 long형 변수
+    public static boolean bTitchk;    //LJY20230911 : TITENG 리더기 데이터 처리를 위한 구분 값
 
     public static boolean isrun;
     public static boolean bRESTART = false; //OSM20250902 : RESTART 플래그 값 추가
@@ -356,7 +356,7 @@ public class SharedArray {
     }
 
 
-    //OSM20260312 : HexCompat 메서드 추가
+    //OSM20260430 : HexCompat 메서드 추가
     public static long strtolHexCompat(char[] src) {
         int i = 0;
         int len = src.length;
@@ -919,7 +919,7 @@ public class SharedArray {
         bTitchk = false; //LJY20230911 : TITENG 리더기 데이터 처리를 위한 구분 값 초기화
     }
 
-    //OSM20260312 : 전문 길이 가변처리 공동 메서드 정의
+    //OSM20260430 : 전문 길이 가변처리 공동 메서드 정의
     public static byte[] buildLen4Packet(String body) {
         try {
             byte[] bodyBytes = body.getBytes("EUC-KR");
