@@ -969,6 +969,11 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
 
+
+            //OSM20240722 : 설정저장 API 추가 (화이트블록 전용)
+            //OSM20240722 : 설정저장 API 추가 (화이트블록 전용)
+
+
             //OSM20240722 : 설정저장 API 추가 (화이트블록 전용)
             else if (intent.getStringExtra("NVCATSENDDATA").equals("SETENV_WB")) {
                 SharedManager.LogDebug(bLogUse, "debugjy", "[NVCAT] 설정저장 버튼 클릭되었습니다.");
